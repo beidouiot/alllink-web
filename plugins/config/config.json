@@ -1,0 +1,6 @@
+{
+	"local": "http://localhost:9999",
+	"dev": "http://dev.iot.beidouiot.com",
+	"test": "http://test.iot.beidouiot.com",
+	"prod": "http://iot.beidouiot.com"
+}
