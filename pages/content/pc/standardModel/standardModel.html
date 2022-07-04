@@ -155,7 +155,7 @@
                                 </div>
     <div class="form-group form-inline">
         <div class="btn-group">
-   <button type="button" class="btn  btn-success" title="增加属性" onclick="showPropertyDiv();">增加属性</button><button type="button" class="btn  btn-success" title="保存属性" onclick="saveProperty();">保存属性</button></div>
+   <button type="button" class="btn  btn-success" title="增加属性" onclick="showPropertyDiv(null);">增加属性</button><button type="button" class="btn  btn-success" title="保存属性" onclick="saveProperty();">保存属性</button></div>
     </div>
                             </div>
                             <!--属性显示的内容/-->
@@ -197,7 +197,7 @@
                     <!--tab页/-->
 
                         <div class="form-group"><div class="btn-group">
-   <button type="button" class="btn btn-success" title="发布标准模型" onclick="pubModel();">发布标准物模型</button>&nbsp;<button type="button" class="btn btn-success" title="删除标准模型" onclick="delModel();">删除标准物模型</button></div>
+   <button type="button" class="btn btn-success" title="发布标准模型" onclick="pubModel();">发布标准物模型</button>&nbsp;</div>
     </div>
 
                 </div>
@@ -250,8 +250,11 @@
     var urlinfo = window.location.href;
     var len = urlinfo.split("?");
     var newsidinfo = len[1];
+    console.log("len="+len);
+    console.log("newsidinfo=" + newsidinfo);
     var newsids = newsidinfo.split("=");
     var parameter1 = newsids[1];
+    console.log("parameter1="+parameter1);
     var p = 0;
     var e = 0;
     var c = 0;
@@ -285,11 +288,73 @@
             $(".select2").select2();
         });
         $(document).ready(function() {
-            showPropertyDiv();
-            showEventDiv();
-            showCommandDiv();
+            var models = loadModel();
+            var properties = models.standardPropertyModelList;
+            var events = models.standardEventModelDtoList;
+            var commands = models.standardCommandModelDtoList;
+            showPropertyDiv(properties);
+            showEventDiv(events);
+            showCommandDiv(commands);
         });
-function showPropertyDiv() {
+function showPropertyDiv(properties) {
+    if(properties != null || properties != "" || properties != "null") {
+        $.each(properties, function(i,item){
+            p += 1;
+            var pdiv = "";
+            pdiv += '<div class="col-md-2 title">属性名称</div>';
+            pdiv += '<div class="col-md-4 data text">';
+            pdiv += '<input type="text" id="pname" value="'+item.name+'" class="form-control" placeholder="请输入属性名称（必填）" >';
+            pdiv += '</div>';
+            pdiv += '<div class="col-md-2 title">标识符</div>';
+            pdiv += '<div class="col-md-4 data text">';
+            pdiv += '<input type="text" id="pcode" class="form-control" placeholder="请输入属性标识符（必填）" value="'+item.code+'">';
+            pdiv += '</div>';
+            pdiv += '<div class="col-md-2 title">数据类型</div>';
+            pdiv += '<div class="col-md-4 data text">';
+            pdiv += '<div class="form-group form-inline">';
+            pdiv += '<div class="radio"><label><input type="radio" id="dataType'+p.toString()+'" name="dataType'+p.toString()+'"  value="1"> 数值型</label></div>';
+            pdiv += '<div class="radio"><label><input type="radio" id="dataType'+p.toString()+'" name="dataType'+p.toString()+'" value="2"> 布尔型</label></div>';
+            pdiv += '<div class="radio"><label><input type="radio" id="dataType'+p.toString()+'" name="dataType'+p.toString()+'" value="3"> 字符型</label></div>';
+            pdiv += '<div class="radio"><label><input type="radio" id="dataType'+p.toString()+'" name="dataType'+p.toString()+'" value="4" disabled> 枚举型</label></div>';
+            pdiv += '</div>';
+            pdiv += '</div>';
+            pdiv += '<div class="col-md-2 title">访问类型</div>';
+            pdiv += '<div class="col-md-4 data text">';
+            pdiv += '<div class="form-group form-inline">';
+            pdiv += '<div class="radio"><label><input type="radio" id="accessType'+p.toString()+'" name="accessType'+p.toString()+'" value="1" checked> 只读</label></div>';
+            pdiv += '<div class="radio"><label><input type="radio" id="accessType'+p.toString()+'" name="accessType'+p.toString()+'" value="2"> 读写</label></div>'
+            pdiv += '</div>';
+            pdiv += '</div>';
+            pdiv += '<div class="col-md-2 title ">发布状态</div>';
+            pdiv += '<div class="col-md-10 data ">';
+            pdiv += (item.status ? "已发布" : "未发布");
+            pdiv += '</div>';
+            pdiv += '<div> &nbsp;</div>';
+            $('#prowdiv').append(pdiv);
+            if(item.dataType == "1") {
+                $("input:radio[name='dataType"+p.toString()+"']").eq(0).attr('checked','true');
+            }
+            if(item.dataType == "2") {
+                $("input:radio[name='dataType"+p.toString()+"']").eq(1).attr('checked','true');
+            }
+            if(item.dataType == "3") {
+                $("input:radio[name='dataType"+p.toString()+"']").eq(2).attr('checked','true');
+            }
+            if(item.dataType == "4") {
+                $("input:radio[name='dataType"+p.toString()+"']").eq(3).attr('checked','true');
+
+            }
+            if(item.accessType == "1") {
+                $("input:radio[name='accessType"+p.toString()+"']").eq(0).attr('checked','true');
+            }
+            if(item.accessType == "2") {
+                $("input:radio[name='accessType"+p.toString()+"']").eq(1).attr('checked','true');
+            }
+            // console.log("pdiv="+pdiv);
+        });  
+        return;
+    }
+
     p += 1;
     var pdiv = "";
     pdiv += '<div class="col-md-2 title">属性名称</div>';
@@ -318,7 +383,6 @@ function showPropertyDiv() {
     pdiv += '</div>';
     pdiv += '<div> &nbsp;</div>';
     $('#prowdiv').append(pdiv);
-    console.log("pdiv="+pdiv);
     // $('input[id="dataType"]').each(function() {
     //     $(this).id="dataType"+p.toString();
     //     alert("p="+p);
@@ -328,7 +392,53 @@ function showPropertyDiv() {
 
 }
 
-function showEventDiv() {
+function showEventDiv(events) {
+ if(events != null || events != "" || events != "null") {
+    $.each(events, function(i,item){
+        e += 1;
+        var ediv = "";
+        ediv += '<div class="col-md-2 title">事件名称</div>';
+        ediv += '<div class="col-md-4 data">';
+        ediv += '<input type="text" id="ename" class="form-control" placeholder="请输入事件名称（必填）" value="'+item.name+'">';
+        ediv += '</div>';
+        ediv += '<div class="col-md-2 title">事件标识符</div>';
+        ediv += '<div class="col-md-4 data">';
+        ediv += '<input type="text" id="ecode" class="form-control" placeholder="请输入事件标识符（必填）" value="'+item.code+'">';
+        ediv += '</div>';
+        ediv += '<div class="col-md-2 title">事件类型</div>';
+        ediv += '<div class="col-md-10 data">';
+        ediv += '<div class="form-group form-inline">';
+        ediv += '<div class="radio"><label><input type="radio" id="eventType'+e.toString()+'" name="eventType'+e.toString()+'" value="1">信息</label></div>';
+        ediv += '<div class="radio"><label><input type="radio" id="eventType'+e.toString()+'"  name="eventType'+e.toString()+'" value="2"> 告警</label></div>';
+        ediv += '<div class="radio"><label><input type="radio" id="eventType'+e.toString()+'"  name="eventType'+e.toString()+'" value="3"> 故障</label></div>';
+        ediv += '</div>';
+        ediv += '</div>';
+        ediv += '<div class="col-md-2 title rowHeight2x">备注</div>';
+        ediv += '<div class="col-md-10 data rowHeight2x">';
+        ediv += '<textarea class="form-control" id="eremark" value="'+item.remark+'" rows="3" placeholder="请输入备注..."></textarea>';
+        ediv += '</div>';
+        ediv += '<div class="col-md-2 title ">发布状态</div>';
+        ediv += '<div class="col-md-10 data ">';
+        ediv += (item.status ? "已发布" : "未发布");
+        ediv += '</div>';
+        ediv += '<div> &nbsp;</div>';
+        $('#erowdiv').append(ediv); 
+        if(item.eventType == 1) {
+            $("input:radio[name='eventType"+e.toString()+"']").eq(0).attr('checked','true');
+        }
+        if(item.eventType == 2) {
+            $("input:radio[name='eventType"+e.toString()+"']").eq(1).attr('checked','true');
+        }
+        if(item.eventType == 3) {
+            $("input:radio[name='eventType"+e.toString()+"']").eq(2).attr('checked','true');
+        }
+
+    });
+
+    return;
+ }
+
+
     e += 1;
     var ediv = "";
     ediv += '<div class="col-md-2 title">事件名称</div>';
@@ -349,14 +459,54 @@ function showEventDiv() {
     ediv += '</div>';
     ediv += '<div class="col-md-2 title rowHeight2x">备注</div>';
     ediv += '<div class="col-md-10 data rowHeight2x">';
-    ediv += '<textarea class="form-control" rows="3" placeholder="请输入备注..."></textarea>';
+    ediv += '<textarea class="form-control" id="eremark" rows="3" placeholder="请输入备注..."></textarea>';
     ediv += '</div>';
     ediv += '<div> &nbsp;</div>';
     $('#erowdiv').append(ediv);    
 
 }
 
-function showCommandDiv() {
+function showCommandDiv(commands) {
+    if(commands != null || commands != "" || commands != "null") {
+        $.each(commands, function(i,item){
+        c += 1;
+        var cdiv = "";
+        cdiv += '<div class="col-md-2 title">指令名称</div>';
+        cdiv += '<div class="col-md-4 data">';
+        cdiv += '<input type="text" id="cname" class="form-control" placeholder="请输入指令名称（必填）" value="'+item.name+'">';
+        cdiv += '</div>';
+        cdiv += '<div class="col-md-2 title">指令标识符</div>';
+        cdiv += '<div class="col-md-4 data">';
+        cdiv += '<input type="text" id="ccode" class="form-control" placeholder="请输入指令标识符（必填）" value="'+item.code+'">';
+        cdiv += '</div>';
+        cdiv += '<div class="col-md-2 title">调用方式</div>';
+        cdiv += '<div class="col-md-10 data">';
+        cdiv += '<div class="form-group form-inline">';
+        cdiv += '<div class="radio"><label><input type="radio" id="callMode'+c.toString()+'" name="callMode'+c.toString()+'" value="1">异步</label></div>';
+        cdiv += '<div class="radio"><label><input type="radio" id="callMode'+c.toString()+'"  name="callMode'+c.toString()+'" value="2"> 同步</label></div>';
+        cdiv += '</div>';
+        cdiv += '</div>';
+        cdiv += '<div class="col-md-2 title rowHeight2x">备注</div>';
+        cdiv += '<div class="col-md-10 data rowHeight2x">';
+        cdiv += '<textarea class="form-control" id="cremark" value="'+item.remark+'" rows="3" placeholder="请输入备注..."></textarea>';
+        cdiv += '</div>';
+        cdiv += '<div class="col-md-2 title ">发布状态</div>';
+        cdiv += '<div class="col-md-10 data ">';
+        cdiv += (item.status ? "已发布" : "未发布");
+        cdiv += '</div>';
+        cdiv += '<div> &nbsp;</div>';
+        $('#crowdiv').append(cdiv);    
+        if(item.callMode == 1) {
+            $("input:radio[name='callMode"+c.toString()+"']").eq(0).attr('checked','true');
+        }
+        if(item.callMode == 2) {
+            $("input:radio[name='callMode"+c.toString()+"']").eq(1).attr('checked','true');
+        }
+
+        });
+        return;
+    } 
+
     c += 1;
     var cdiv = "";
     cdiv += '<div class="col-md-2 title">指令名称</div>';
@@ -376,7 +526,7 @@ function showCommandDiv() {
     cdiv += '</div>';
     cdiv += '<div class="col-md-2 title rowHeight2x">备注</div>';
     cdiv += '<div class="col-md-10 data rowHeight2x">';
-    cdiv += '<textarea class="form-control" rows="3" placeholder="请输入备注..."></textarea>';
+    cdiv += '<textarea class="form-control" id="cremark" rows="3" placeholder="请输入备注..."></textarea>';
     cdiv += '</div>';
     cdiv += '<div> &nbsp;</div>';
     $('#crowdiv').append(cdiv);    
@@ -388,8 +538,8 @@ function saveProperty() {
     var pdataTypes = [];
     var paccessTypes = [];
     var k = 0;
-    var jsonData = "";
-    jsonData = 
+    var jsonData = {};
+    // jsonData = 
     $('input[id="pname"]').each(function() {
         pnames.push($(this).val());
     });
@@ -402,48 +552,258 @@ function saveProperty() {
         var cjd = {};
         cjd["name"] = pnames[i];
         cjd["code"] = pcodes[i];
-        cjd["dataType"] = $('input[id="dataType'+i.toString()+'"]:checked').val();
-        cjd["accessType"] = $('input[id="accessType'+i.toString()+'"]:checked').val();
+        cjd["dataType"] = $('input[id="dataType'+(i+1).toString()+'"]:checked').val();
+        cjd["accessType"] = $('input[id="accessType'+(i+1).toString()+'"]:checked').val();
+        cjd["productTypeId"] = parameter1;
         tmp[i] = cjd;
-        console.log("cjd="+parameter1JSON.stringify(cjd));
+        console.log("cjd="+JSON.stringify(cjd));
     }
     jsonData["productTypeId"] = parameter1;
     jsonData["standardPropertyModelList"] = tmp;
     console.log("jsonData="+JSON.stringify(jsonData));
-    $('input[id="dataType"]:checked').each(function() {
-        alert("pd="+$(this).val());
-        pdataTypes.push($(this).val());
-    });
-    $('input[id="accessType"]:checked').each(function() {
-        alert("pa="+$(this).val());
-        paccessTypes.push($(this).val());
-    });
+    // $('input[id="dataType"]:checked').each(function() {
+    //     alert("pd="+$(this).val());
+    //     pdataTypes.push($(this).val());
+    // });
+    // $('input[id="accessType"]:checked').each(function() {
+    //     alert("pa="+$(this).val());
+    //     paccessTypes.push($(this).val());
+    // });
+    var storage = window.localStorage;
+    var ctx = storage.getItem("ctx");
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        // async: false,
+        beforeSend: function(XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization","Bearer "+storage.getItem("token"));
+        },
+        contentType: "application/json;charset=utf-8",
+        url:ctx+'api/pc/standard/pm/v1/add',
+        data:JSON.stringify(jsonData),
+        success: function(resData){
+            if(resData.code == 0) {
+                alert(resData.code+resData.msg);
+            } else {
+                alert(resData.code+resData.msg);
 
+            }
+            
+        },
+        error: function(XMLHttpRequest,status, error) {
+            console.log("xhr======"+JSON.stringify(XMLHttpRequest));
+        }
+    });
 
 }
 
 function saveEvent() {
+    var enames = [];
+    var ecodes = [];
+    var eventTypes = [];
+    var eremarks = [];
+    var k = 0;
+    var jsonData = {};
+    // jsonData = 
+    $('input[id="ename"]').each(function() {
+        enames.push($(this).val());
+    });
+    $('input[id="ecode"]').each(function() {
+        ecodes.push($(this).val());
+    });
+    $('input[id="eremark"]').each(function() {
+        eremarks.push($(this).val());
+    });
+    var tmp = [];
+    alert("enames.length="+enames.length);
+    for(var i = 0; i < enames.length; i++) {
+        var cjd = {};
+        cjd["name"] = enames[i];
+        cjd["code"] = ecodes[i];
+        cjd["eventType"] = $('input[id="eventType'+(i+1).toString()+'"]:checked').val();
+        cjd["remark"] = eremarks[i];
+        cjd["productTypeId"] = parameter1;
+        tmp[i] = cjd;
+        console.log("cjd="+JSON.stringify(cjd));
+    }
+    jsonData["productTypeId"] = parameter1;
+    jsonData["standardEventModelList"] = tmp;
+    console.log("jsonData="+JSON.stringify(jsonData));
+    // $('input[id="dataType"]:checked').each(function() {
+    //     alert("pd="+$(this).val());
+    //     pdataTypes.push($(this).val());
+    // });
+    // $('input[id="accessType"]:checked').each(function() {
+    //     alert("pa="+$(this).val());
+    //     paccessTypes.push($(this).val());
+    // });
+    var storage = window.localStorage;
+    var ctx = storage.getItem("ctx");
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        // async: false,
+        beforeSend: function(XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization","Bearer "+storage.getItem("token"));
+        },
+        contentType: "application/json;charset=utf-8",
+        url:ctx+'api/pc/standard/em/v1/add',
+        data:JSON.stringify(jsonData),
+        success: function(resData){
+            if(resData.code == 0) {
+                alert(resData.code+resData.msg);
+            } else {
+                alert(resData.code+resData.msg);
 
-    var jsonData = "";
-    jsonData = {"productTypeId":parameter1};
+            }
+            
+        },
+        error: function(XMLHttpRequest,status, error) {
+            console.log("xhr======"+JSON.stringify(XMLHttpRequest));
+        }
+    });
+
 }
 
 function saveCommand() {
+    var cnames = [];
+    var ccodes = [];
+    var callModes = [];
+    var cremarks = [];
+    var k = 0;
+    var jsonData = {};
+    // jsonData = 
+    $('input[id="cname"]').each(function() {
+        cnames.push($(this).val());
+    });
+    $('input[id="ccode"]').each(function() {
+        ccodes.push($(this).val());
+    });
+    $('input[id="cremark"]').each(function() {
+        cremarks.push($(this).val());
+    });
+    var tmp = [];
+    alert("cnames.length="+cnames.length);
+    for(var i = 0; i < cnames.length; i++) {
+        var cjd = {};
+        cjd["name"] = cnames[i];
+        cjd["code"] = ccodes[i];
+        cjd["callMode"] = $('input[id="callMode'+(i+1).toString()+'"]:checked').val();
+        cjd["remark"] = cremarks[i];
+        cjd["productTypeId"] = parameter1;
+        tmp[i] = cjd;
+        console.log("cjd="+JSON.stringify(cjd));
+    }
+    jsonData["productTypeId"] = parameter1;
+    jsonData["standardCommandModelList"] = tmp;
+    console.log("jsonData="+JSON.stringify(jsonData));
+    // $('input[id="dataType"]:checked').each(function() {
+    //     alert("pd="+$(this).val());
+    //     pdataTypes.push($(this).val());
+    // });
+    // $('input[id="accessType"]:checked').each(function() {
+    //     alert("pa="+$(this).val());
+    //     paccessTypes.push($(this).val());
+    // });
+    var storage = window.localStorage;
+    var ctx = storage.getItem("ctx");
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        // async: false,
+        beforeSend: function(XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization","Bearer "+storage.getItem("token"));
+        },
+        contentType: "application/json;charset=utf-8",
+        url:ctx+'api/pc/standard/cm/v1/add',
+        data:JSON.stringify(jsonData),
+        success: function(resData){
+            if(resData.code == 0) {
+                alert(resData.code+resData.msg);
+            } else {
+                alert(resData.code+resData.msg);
 
-    var jsonData = "";
-    jsonData = {"productTypeId":parameter1};
+            }
+            
+        },
+        error: function(XMLHttpRequest,status, error) {
+            console.log("xhr======"+JSON.stringify(XMLHttpRequest));
+        }
+    });
 }
 
 function pubModel() {
+    var jsonData = {"id":parameter1};
+    var storage = window.localStorage;
+    var ctx = storage.getItem("ctx");
+    // var data = "";
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        async: false,
+        beforeSend: function(XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization","Bearer "+storage.getItem("token"));
+        },
+        contentType: "application/json;charset=utf-8",
+        url:ctx+'api/pc/standard/model/v1/pubModel',
+        data:JSON.stringify(jsonData),
+        success: function(resData){
+            if(resData.code == 0) {            
+                console.log("resData=11="+JSON.stringify(resData.data));
+                alert(resData.code+resData.msg);
+                // data = resData.data;
+            } else {
+                alert(resData.code+resData.msg);
 
-    var jsonData = "";
-    jsonData = {"productTypeId":parameter1};
+            }
+            
+        },
+        error: function(XMLHttpRequest,status, error) {
+            console.log("xhr======"+JSON.stringify(XMLHttpRequest));
+        }
+    });
+    
+
 }
 
 function delModel() {
 
     var jsonData = "";
     jsonData = {"productTypeId":parameter1};
+}
+
+function loadModel() {
+    var jsonData = {"id":parameter1};
+    var storage = window.localStorage;
+    var ctx = storage.getItem("ctx");
+    var data = "";
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        async: false,
+        beforeSend: function(XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization","Bearer "+storage.getItem("token"));
+        },
+        contentType: "application/json;charset=utf-8",
+        url:ctx+'api/pc/standard/model/v1/findOne',
+        data:JSON.stringify(jsonData),
+        success: function(resData){
+            if(resData.code == 0) {
+                // alert(resData.code+resData.msg);
+                
+                console.log("resData=11="+JSON.stringify(resData.data));
+                data = resData.data;
+            } else {
+                alert(resData.code+resData.msg);
+
+            }
+            
+        },
+        error: function(XMLHttpRequest,status, error) {
+            console.log("xhr======"+JSON.stringify(XMLHttpRequest));
+        }
+    });
+    return data;
 }
 
 </script>

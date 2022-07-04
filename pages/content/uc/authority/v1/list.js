@@ -789,7 +789,7 @@ function showUserListDataForAuth(userData) {
 		htmlData += '<td>'+item.mobile+'</td>';
 		htmlData += '<td>'+item.name+'</td>';
 		htmlData += '<td>'+item.nickname+'</td>';
-		htmlData += '<td>'+item.status+'</td>';
+		htmlData += '<td>'+item.strStatus+'</td>';
 		htmlData += '<td>'+item.tenantId+'</td>';
 		htmlData += '<td>'+item.customerId+'</td>';
 		htmlData += '</tr>';
