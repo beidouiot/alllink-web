@@ -9,9 +9,9 @@
 
 
 
-    <title>标准物模型</title>
-    <meta name="description" content="标准物模型">
-    <meta name="keywords" content="标准物模型">
+    <title>产品物模型</title>
+    <meta name="description" content="产品物模型">
+    <meta name="keywords" content="产品物模型">
 
 
 
@@ -132,13 +132,13 @@
                         <!--tab头-->
                         <ul class="nav nav-tabs">
                             <li class="active">
-                                <a href="#tab-label" data-toggle="tab">标准属性模型</a>
+                                <a href="#tab-label" data-toggle="tab">产品属性模型</a>
                             </li>
                             <li>
-                                <a href="#tab-common" data-toggle="tab">标准事件模型</a>
+                                <a href="#tab-common" data-toggle="tab">产品事件模型</a>
                             </li>
                             <li>
-                                <a href="#tab-select" data-toggle="tab">标准指令模型</a>
+                                <a href="#tab-select" data-toggle="tab">产品指令模型</a>
                             </li>
                         </ul>
                         <!--tab头/-->
@@ -197,7 +197,7 @@
                     <!--tab页/-->
 
                         <div class="form-group"><div class="btn-group">
-   <button type="button" class="btn btn-success" title="发布标准模型" onclick="pubModel();">发布标准物模型</button>&nbsp;</div>
+   <button type="button" class="btn btn-success" title="发布产品模型" onclick="pubModel();">发布产品物模型</button>&nbsp;</div>
     </div>
 
                 </div>
@@ -289,9 +289,10 @@
         });
         $(document).ready(function() {
             var models = loadModel();
-            var properties = models.standardPropertyModelList;
-            var events = models.standardEventModelDtoList;
-            var commands = models.standardCommandModelDtoList;
+            var properties = models.productPropertyModelList;
+            var events = models.productEventModelList;
+            var commands = models.productCommandModelList;
+            console.log("events="+JSON.stringify(events));
             showPropertyDiv(properties);
             showEventDiv(events);
             showCommandDiv(commands);
@@ -566,12 +567,13 @@ function saveProperty() {
         cjd["id"] = pids[i];
         cjd["dataType"] = $('input[id="dataType'+(i+1).toString()+'"]:checked').val();
         cjd["accessType"] = $('input[id="accessType'+(i+1).toString()+'"]:checked').val();
-        cjd["productTypeId"] = parameter1;
+        cjd["productId"] = parameter1;
+        cjd["status"] = false;
         tmp[i] = cjd;
         console.log("cjd="+JSON.stringify(cjd));
     }
-    jsonData["productTypeId"] = parameter1;
-    jsonData["standardPropertyModelList"] = tmp;
+    jsonData["productId"] = parameter1;
+    jsonData["productPropertyModelList"] = tmp;
     console.log("jsonData="+JSON.stringify(jsonData));
     // $('input[id="dataType"]:checked').each(function() {
     //     alert("pd="+$(this).val());
@@ -585,9 +587,9 @@ function saveProperty() {
     var ctx = storage.getItem("ctx");
     var url = "";
     if(pids[0] == null || pids[0] == "") {
-        url = "api/pc/standard/pm/v1/add";
+        url = "api/pc/product/pm/v1/add";
     } else {
-        url = "api/pc/standard/pm/v1/update";
+        url = "api/pc/product/pm/v1/update";
     }
 
     $.ajax({
@@ -646,12 +648,13 @@ function saveEvent() {
         cjd["id"] = eids[i];
         cjd["eventType"] = $('input[id="eventType'+(i+1).toString()+'"]:checked').val();
         cjd["remark"] = eremarks[i];
-        cjd["productTypeId"] = parameter1;
+        cjd["productId"] = parameter1;
+        cjd["status"] = false;
         tmp[i] = cjd;
         console.log("cjd="+JSON.stringify(cjd));
     }
-    jsonData["productTypeId"] = parameter1;
-    jsonData["standardEventModelList"] = tmp;
+    jsonData["productId"] = parameter1;
+    jsonData["productEventModelList"] = tmp;
     console.log("jsonData="+JSON.stringify(jsonData));
     // $('input[id="dataType"]:checked').each(function() {
     //     alert("pd="+$(this).val());
@@ -665,9 +668,9 @@ function saveEvent() {
     var ctx = storage.getItem("ctx");
     var url = "";
     if(eids[0] == null || eids[0] == "") {
-        url = "api/pc/standard/em/v1/add";
+        url = "api/pc/product/em/v1/add";
     } else {
-        url = "api/pc/standard/em/v1/update";
+        url = "api/pc/product/em/v1/update";
     }
     $.ajax({
         type: "POST",
@@ -725,12 +728,13 @@ function saveCommand() {
         cjd["id"] = cids[i];
         cjd["callMode"] = $('input[id="callMode'+(i+1).toString()+'"]:checked').val();
         cjd["remark"] = cremarks[i];
-        cjd["productTypeId"] = parameter1;
+        cjd["productId"] = parameter1;
+        cjd["status"] = false;
         tmp[i] = cjd;
         console.log("cjd="+JSON.stringify(cjd));
     }
-    jsonData["productTypeId"] = parameter1;
-    jsonData["standardCommandModelList"] = tmp;
+    jsonData["productId"] = parameter1;
+    jsonData["productCommandModelList"] = tmp;
     console.log("jsonData="+JSON.stringify(jsonData));
     // $('input[id="dataType"]:checked').each(function() {
     //     alert("pd="+$(this).val());
@@ -744,9 +748,9 @@ function saveCommand() {
     var ctx = storage.getItem("ctx");
     var url = "";
     if(cids[0] == null || cids[0] == "") {
-        url = "api/pc/standard/cm/v1/add";
+        url = "api/pc/product/cm/v1/add";
     } else {
-        url = "api/pc/standard/cm/v1/update";
+        url = "api/pc/product/cm/v1/update";
     }
     $.ajax({
         type: "POST",
@@ -786,7 +790,7 @@ function pubModel() {
             XMLHttpRequest.setRequestHeader("Authorization","Bearer "+storage.getItem("token"));
         },
         contentType: "application/json;charset=utf-8",
-        url:ctx+'api/pc/standard/model/v1/pubModel',
+        url:ctx+'api/pc/product/model/v1/pubModel',
         data:JSON.stringify(jsonData),
         success: function(resData){
             if(resData.code == 0) {            
@@ -810,7 +814,7 @@ function pubModel() {
 function delModel() {
 
     var jsonData = "";
-    jsonData = {"productTypeId":parameter1};
+    jsonData = {"productId":parameter1};
 }
 
 function loadModel() {
@@ -826,7 +830,7 @@ function loadModel() {
             XMLHttpRequest.setRequestHeader("Authorization","Bearer "+storage.getItem("token"));
         },
         contentType: "application/json;charset=utf-8",
-        url:ctx+'api/pc/standard/model/v1/findOne',
+        url:ctx+'api/pc/product/model/v1/findOne',
         data:JSON.stringify(jsonData),
         success: function(resData){
             if(resData.code == 0) {
