@@ -13,7 +13,6 @@ function showList() {
     var htmlSearch = "";
     htmlSearch += '<div class="box box-primary">';
     htmlSearch += '<div class="box-body">';
-
     htmlSearch += '<div class="table-box">';
 
     htmlSearch += '<div class="pull-left">';
