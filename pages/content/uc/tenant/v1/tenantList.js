@@ -255,7 +255,7 @@ function showTenantsList(pageNumber) {
 			htmlData += '<td>'+item.linkman+'</td>';
 			htmlData += '<td>'+item.email+'</td>';
 			htmlData += '<td>'+item.phone+'</td>';
-			htmlData += '<td>'+item.status+'</td>';
+			htmlData += '<td>'+item.strStatus+'</td>';
 			htmlData += '<td class="text-center">'
 			htmlData += '<button type="button" class="btn bg-olive btn-xs" onclick=editTenant("'+item.strId+'"); data-toggle="modal" data-target="#tenantAddWin">修改</button>&nbsp;';
 			htmlData += '<button type="button" class="btn bg-olive btn-xs" onclick=delTenant("'+item.strId+'"); >删除</button>';
@@ -277,7 +277,7 @@ function showTenantsReady(tenantsPageData) {
 			htmlData += '<td>'+item.linkman+'</td>';
 			htmlData += '<td>'+item.email+'</td>';
 			htmlData += '<td>'+item.phone+'</td>';
-			htmlData += '<td>'+item.status+'</td>';
+			htmlData += '<td>'+item.strStatus+'</td>';
 			htmlData += '<td class="text-center">'
 			htmlData += '<button type="button" class="btn bg-olive btn-xs" onclick=editTenant("'+item.strId+'"); data-toggle="modal" data-target="#tenantAddWin">修改</button>&nbsp;';
 			htmlData += '<button type="button" class="btn bg-olive btn-xs" onclick=delTenant("'+item.strId+'"); >删除</button>';

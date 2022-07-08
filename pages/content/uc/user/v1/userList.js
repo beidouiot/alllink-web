@@ -396,7 +396,7 @@ function showUsersList(pageNumber) {
 			htmlData += '<td>'+item.email+'</td>';
 			htmlData += '<td>'+item.name+'</td>';
 			htmlData += '<td>'+item.nickname+'</td>';
-			htmlData += '<td>'+item.status+'</td>';
+			htmlData += '<td>'+item.strStatus+'</td>';
 			htmlData += '<td>'+item.strTenantId+'</td>';
 			htmlData += '<td>'+item.strCustomerId+'</td>';
 			htmlData += '<td class="text-center">'
@@ -421,7 +421,7 @@ function showUsersReady(usersPageData) {
 			htmlData += '<td>'+item.email+'</td>';
 			htmlData += '<td>'+item.name+'</td>';
 			htmlData += '<td>'+item.nickname+'</td>';
-			htmlData += '<td>'+item.status+'</td>';
+			htmlData += '<td>'+item.strStatus+'</td>';
 			htmlData += '<td>'+item.strTenantId+'</td>';
 			htmlData += '<td>'+item.strCustomerId+'</td>';
 			htmlData += '<td class="text-center">'
