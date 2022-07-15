@@ -5,6 +5,10 @@
     <!-- 页面meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
     <title>产品物模型</title>
     <meta name="description" content="产品物模型">
     <meta name="keywords" content="产品物模型">
@@ -382,11 +386,7 @@ function showPropertyDiv(properties) {
     pdiv += '</div>';
     pdiv += '<div> &nbsp;</div>';
     $('#prowdiv').append(pdiv);
-    // $('input[id="dataType"]').each(function() {
-    //     $(this).id="dataType"+p.toString();
-    //     alert("p="+p);
-    //     // pdataTypes.push($(this).val());
-    // });
+
 
 
 }
@@ -555,7 +555,7 @@ function saveProperty() {
         pids.push($(this).val());
     });
     var tmp = [];
-    alert("pnames.length="+pnames.length);
+
     for(var i = 0; i < pnames.length; i++) {
         var cjd = {};
         cjd["name"] = pnames[i];
@@ -570,15 +570,7 @@ function saveProperty() {
     }
     jsonData["productId"] = parameter1;
     jsonData["productPropertyModelList"] = tmp;
-    console.log("jsonData="+JSON.stringify(jsonData));
-    // $('input[id="dataType"]:checked').each(function() {
-    //     alert("pd="+$(this).val());
-    //     pdataTypes.push($(this).val());
-    // });
-    // $('input[id="accessType"]:checked').each(function() {
-    //     alert("pa="+$(this).val());
-    //     paccessTypes.push($(this).val());
-    // });
+
     var storage = window.localStorage;
     var ctx = storage.getItem("ctx");
     var url = "";
@@ -636,7 +628,7 @@ function saveEvent() {
         eids.push($(this).val());
     });
     var tmp = [];
-    alert("enames.length="+enames.length);
+
     for(var i = 0; i < enames.length; i++) {
         var cjd = {};
         cjd["name"] = enames[i];
@@ -651,15 +643,7 @@ function saveEvent() {
     }
     jsonData["productId"] = parameter1;
     jsonData["productEventModelList"] = tmp;
-    console.log("jsonData="+JSON.stringify(jsonData));
-    // $('input[id="dataType"]:checked').each(function() {
-    //     alert("pd="+$(this).val());
-    //     pdataTypes.push($(this).val());
-    // });
-    // $('input[id="accessType"]:checked').each(function() {
-    //     alert("pa="+$(this).val());
-    //     paccessTypes.push($(this).val());
-    // });
+
     var storage = window.localStorage;
     var ctx = storage.getItem("ctx");
     var url = "";
@@ -716,7 +700,7 @@ function saveCommand() {
         cids.push($(this).val());
     });
     var tmp = [];
-    alert("cnames.length="+cnames.length);
+
     for(var i = 0; i < cnames.length; i++) {
         var cjd = {};
         cjd["name"] = cnames[i];
@@ -731,15 +715,7 @@ function saveCommand() {
     }
     jsonData["productId"] = parameter1;
     jsonData["productCommandModelList"] = tmp;
-    console.log("jsonData="+JSON.stringify(jsonData));
-    // $('input[id="dataType"]:checked').each(function() {
-    //     alert("pd="+$(this).val());
-    //     pdataTypes.push($(this).val());
-    // });
-    // $('input[id="accessType"]:checked').each(function() {
-    //     alert("pa="+$(this).val());
-    //     paccessTypes.push($(this).val());
-    // });
+
     var storage = window.localStorage;
     var ctx = storage.getItem("ctx");
     var url = "";
@@ -790,7 +766,6 @@ function pubModel() {
         data:JSON.stringify(jsonData),
         success: function(resData){
             if(resData.code == 0) {            
-                console.log("resData=11="+JSON.stringify(resData.data));
                 alert(resData.code+resData.msg);
                 // data = resData.data;
             } else {
@@ -832,7 +807,6 @@ function loadModel() {
             if(resData.code == 0) {
                 // alert(resData.code+resData.msg);
                 
-                console.log("resData=11="+JSON.stringify(resData.data));
                 data = resData.data;
             } else {
                 alert(resData.code+resData.msg);
