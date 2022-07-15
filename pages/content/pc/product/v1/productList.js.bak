@@ -382,6 +382,7 @@ function addProduct() {
 }
 
 function editProduct(productId) {
+    alert("productId="+productId);
     var productData = searchProduct(productId);
     $('#ttl').html("修改产品类别");
     $('#aname').val(productData.name);
@@ -443,11 +444,11 @@ function editProduct(productId) {
     if(productData.networkingProtocol == "RFID") {
         $("input:radio[name='networkingProtocol']").eq(10).attr('checked','true');
     }
-    if(productData.copyFlag == true || productData.copyFlag == "true") {
-        $("input:radio[name='copyFlag']").eq(0).attr('checked','true');
+    if(productData.networkingProtocol == true) {
+        $("input:radio[name='networkingProtocol']").eq(0).attr('checked','true');
     }
-    if(productData.copyFlag == false || productData.copyFlag == "false") {
-        $("input:radio[name='copyFlag']").eq(1).attr('checked','true');
+    if(productData.networkingProtocol == false) {
+        $("input:radio[name='networkingProtocol']").eq(1).attr('checked','true');
     }
     $('#aproductTypeId').val(productData.strProductTypeId);
 
@@ -497,6 +498,7 @@ function saveProduct() {
     var networkingProtocol = $('input[id="networkingProtocol"]:checked').val();
     var copyFlag = $('input[id="copyFlag"]:checked').val();
     var productTypeId = $('#aproductTypeId option:selected').val();
+    alert("productTypeId==="+productTypeId);
     productId = productId == "" ? null : productId;
 
     if(aname == null || aname == "") {
@@ -524,7 +526,7 @@ function saveProduct() {
                 data:JSON.stringify(dataJson),
                 success: function(resData){
                     if(resData.code == 0) {
-                        alert(resData.code+resData.msg);
+                        // alert(resData.code+resData.msg);
                     } else {
                         alert(resData.code+resData.msg);
 
@@ -538,6 +540,7 @@ function saveProduct() {
 }
 
 function delProduct(id) {
+    alert("id="+id);
     var storage = window.localStorage;
     var ctx = storage.getItem("ctx");
     var dataJson = {"id": id};

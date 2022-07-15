@@ -1,5 +1,4 @@
 	var tenantList={};
-	var customerList={};
 	var rolesPageData = "";
 	var menuIds ="";
 	var userIds ="";
@@ -24,12 +23,6 @@ function showList() {
 		htmlSearch += searchTenantsData(tenantList);//后台租户数据
 		htmlSearch += '</select> &nbsp;';
 		htmlSearch += '</div>';
-		htmlSearch += '<div class="input-group row margin">';
-		htmlSearch += '<select id="customerId" class="form-control">';
-		htmlSearch += '<option value="0">全部客户</option>';
-		htmlSearch += searchCustomersData(customerList);//后台租户数据
-		htmlSearch += '</select> &nbsp;';
-		htmlSearch += '</div>';
 	}
 
 	// htmlSearch += '<button type="button" class="btn btn-block btn-success" title="查询" onclick="searchRoleForAuthority(1);"> 查询</button>';
@@ -49,7 +42,6 @@ function showList() {
 	htmlTable += '<th class="text-center">编号</th>';
 	htmlTable += '<th class="text-center">描述</th>';
 	htmlTable += '<th class="text-center">所属租户</th>';
-	htmlTable += '<th class="text-center">所属客户</th>';
 	htmlTable += '<th class="text-center">操作</th>';
 	htmlTable += '</tr>';
 	htmlTable += '</thead>';
@@ -148,75 +140,6 @@ function searchTenantsData(tenantList) {
 	return tenantDataList;
 }
 
-function searchCustomersData(customerList) {
-	var customerDataList = "";
-	var storage = window.localStorage;
-	var ctx = storage.getItem("ctx");
-	var urlAddr = "";
-	var tenantId = $('#tenantId option:selected').val();
-	if(tenantId == 0) {
-		urlAddr = 'api/uc/customer/v1/findAll';
-		$.ajax({
-            type: "GET",
-            dataType: "json",
-            async: false,
-            beforeSend: function(XMLHttpRequest) {
-                XMLHttpRequest.setRequestHeader("Authorization","Bearer "+storage.getItem("token"));
-            },
-            contentType: "application/json;charset=utf-8",
-            url:ctx+'api/uc/customer/v1/findAll',
-            success: function(resData){
-            	if(resData.code == 0) {
-            		customerList = resData.data;
-            		$.each(resData.data, function(i,item){
-            			customerDataList += '<option value="'+item.strId+'">'+item.name+'</option>';
-            		});
-            	} else {
-            		alert(resData.code+resData.msg);
-            		if(resData.code == 401) {
-            			window.location.href=storage.getItem("loginUrl");
-            		}
-            	}
-                
-            },
-            error: function(XMLHttpRequest,status, error) {
-                console.log("xhr======"+JSON.stringify(XMLHttpRequest));
-            }
-        });
-	} else {
-		var jsonData = {"pageSize":100,"tenantId":tenantId};
-		$.ajax({
-	            type: "POST",
-	            dataType: "json",
-	            async: false,
-	            beforeSend: function(XMLHttpRequest) {
-	                XMLHttpRequest.setRequestHeader("Authorization","Bearer "+storage.getItem("token"));
-	            },
-	            contentType: "application/json;charset=utf-8",
-	            url:ctx+'api/uc/customer/v1/findPage',
-	            data:JSON.stringify(jsonData),
-	            success: function(resData){
-	            	if(resData.code == 0) {
-	            		$.each(resData.data.contents, function(i,item){
-	            			customerDataList += '<option value="'+item.strId+'">'+item.name+'</option>';
-	            		});
-	            	} else {
-	            		alert(resData.code+resData.msg);
-	            		if(resData.code == 401) {
-	            			window.location.href=storage.getItem("loginUrl");
-	            		}
-	            	}
-	                
-	            },
-	            error: function(XMLHttpRequest,status, error) {
-	                console.log("xhr======"+JSON.stringify(XMLHttpRequest));
-	            }
-	        });
-	}
-
-	return customerDataList;
-}
-
 function showRoleForAuthority(pageNumber) {
 	rolesPageData = searchRoleForAuthority(pageNumber);
 	var htmlData = "";
@@ -227,7 +150,6 @@ function showRoleForAuthority(pageNumber) {
 			htmlData += '<td>'+item.code+'</td>';
 			htmlData += '<td>'+item.descr+'</td>';
 			htmlData += '<td>'+item.strTenantId+'</td>';
-			htmlData += '<td>'+item.strCustomerId+'</td>';
 			htmlData += '<td class="text-center">'
 			htmlData += '<button type="button" class="btn bg-olive btn-xs" onclick=htmlUserAuthorityModal("'+item.strId+'"); data-toggle="modal" data-target="#userAuthorityEditWin">配置用户</button>&nbsp;';
 			htmlData += '<button type="button" class="btn bg-olive btn-xs" onclick=htmlMenuAuthorityModal("'+item.strId+'"); data-toggle="modal" data-target="#menuAuthorityEditWin">配置功能</button>';
@@ -248,7 +170,6 @@ function showRoleForAuthorityReady(rolesPageData) {
 			htmlData += '<td>'+item.code+'</td>';
 			htmlData += '<td>'+item.descr+'</td>';
 			htmlData += '<td>'+item.strTenantId+'</td>';
-			htmlData += '<td>'+item.strCustomerId+'</td>';
 			htmlData += '<td class="text-center">'
 			htmlData += '<button type="button" class="btn bg-olive btn-xs" onclick=htmlUserAuthorityModal("'+item.strId+'"); data-toggle="modal" data-target="#userAuthorityEditWin">配置用户</button>&nbsp;';
 			htmlData += '<button type="button" class="btn bg-olive btn-xs" onclick=htmlMenuAuthorityModal("'+item.strId+'"); data-toggle="modal" data-target="#menuAuthorityEditWin">配置功能</button>';
@@ -272,10 +193,7 @@ function searchRoleForAuthority(pageNumber) {
 		if(tenantId == 0) {
 			tenantId = null;
 		}
-		var customerId = $('#customerId option selected').val();
-		if(customerId == 0) {
-			customerId == null;
-		}
+
 		var searchData = {"name":roleName,"pageSize":pageSize,"pageNumber":pageNumber};
 		$.ajax({
 	            type: "POST",
@@ -304,7 +222,7 @@ function searchRoleForAuthority(pageNumber) {
 	            }
 	        });
 	} else {
-		var searchData = {"name":roleName,"pageSize":pageSize,"pageNumber":pageNumber,"tenantId":tenantId,"customerId":customerId};
+		var searchData = {"name":roleName,"pageSize":pageSize,"pageNumber":pageNumber,"tenantId":tenantId};
 		$.ajax({
 	            type: "POST",
 	            dataType: "json",
@@ -791,7 +709,6 @@ function showUserListDataForAuth(userData) {
 		htmlData += '<td>'+item.nickname+'</td>';
 		htmlData += '<td>'+item.strStatus+'</td>';
 		htmlData += '<td>'+item.tenantId+'</td>';
-		htmlData += '<td>'+item.customerId+'</td>';
 		htmlData += '</tr>';
 	});
 
