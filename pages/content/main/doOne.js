@@ -21,6 +21,7 @@ $(function(){
 	// $('#doingOne').append(oneTitle+oneTableBox);
 });
 
+
 function findData() {
 	var htmlData = "";
 	var storage = window.localStorage;

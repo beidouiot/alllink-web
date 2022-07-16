@@ -67,6 +67,7 @@ function searchAllDevice() {
 	return countDevices;
 }
 
+
 function searchAllActivationDevice() {
 	var storage = window.localStorage;
 	var ctx = storage.getItem("ctx");
