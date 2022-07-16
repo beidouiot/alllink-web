@@ -26,6 +26,7 @@ $(function(){
 	// $('#doingTwo').append(twoTitle+twoTableBox);
 });
 
+
 function findTwoData() {
 	var htmlTwoData = "";
 	var storage = window.localStorage;

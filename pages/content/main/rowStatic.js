@@ -57,7 +57,6 @@ function searchAllDevice() {
 						// alert(resData.code+resData.msg);
 	            	} else {
 	            		alert(resData.code+resData.msg);
-
 	            	}
 	                
 	            },
