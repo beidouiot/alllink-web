@@ -13,12 +13,12 @@ $(function(){
 	oneTableBox += '</tr></thead>';
 	oneTableBox += '<tbody>';
 	var trDatas = "";
-	trDatas = findData();
-	oneTableBox += trDatas;
+	// trDatas = findData();
+	// oneTableBox += trDatas;
 	oneTableBox += '</tbody>';
 	oneTableBox += '</table>';
 	oneTableBox += '</div></div></div>';
-	$('#doingOne').append(oneTitle+oneTableBox);
+	// $('#doingOne').append(oneTitle+oneTableBox);
 });
 
 

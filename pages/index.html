@@ -9,7 +9,7 @@
 
 
 
-    <title>万联物联网PaaS平台首页</title>
+    <title>万联物联网基础平台首页</title>
     <meta name="description" content="万联物联网">
     <meta name="keywords" content="万联物联网">
 
@@ -261,14 +261,30 @@
             setSidebarActive("admin-index");
         });
 
+        function p(s) {
+            return s < 10 ? '0' + s : s;
+        }
+
         function setUserInfo() {
+            var myDate = new Date();
+            //获取当前年
+            var year = myDate.getFullYear();
+            //获取当前月
+            var month = myDate.getMonth() + 1;
+            //获取当前日
+            var date = myDate.getDate();
+            var h = myDate.getHours(); //获取当前小时数(0-23)
+            var m = myDate.getMinutes(); //获取当前分钟数(0-59)
+            var s = myDate.getSeconds();
+
+            var now = year + '-' + p(month) + "-" + p(date) + " " + p(h) + ':' + p(m) + ":" + p(s);
             var storage = window.localStorage;
             var ctx = storage.getItem("ctx");
             var username = storage.getItem("username");
             $("#username").text(username);
             $("#span-username").text(username);
             $("#span-username2").text(username);
-            $("#login-time").text("12:01");
+            $("#login-time").text("登录时间："+now);
         }
 
         $(document).ready(function() {

@@ -18,12 +18,12 @@ $(function(){
 	twoTableBox += '</thead>';
 	twoTableBox += '<tbody>';
 	var trDatas = "";
-	trTwoDatas = findTwoData();
-	twoTableBox += trTwoDatas;
+	// trTwoDatas = findTwoData();
+	// twoTableBox += trTwoDatas;
 	twoTableBox += '</tbody>';
 	twoTableBox += '</table>';
 	twoTableBox += '</div></div>';
-	$('#doingTwo').append(twoTitle+twoTableBox);
+	// $('#doingTwo').append(twoTitle+twoTableBox);
 });
 
 function findTwoData() {
